@@ -71,3 +71,10 @@ local.properties
 # =========
 .c9/
 mongod
+
+mongo db
+app_data.0
+app_data.ns
+local.0
+local.ns
+mongod.lock
