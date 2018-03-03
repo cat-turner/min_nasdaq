@@ -1,0 +1,9 @@
+<h1>{{ vm.stock.Name}}</h1>
+<h3>{{ vm.stock.Symbol}}</h3>
+
+<ul>
+    <li>Sector: {{vm.stock.Sector}}</li>
+    <li>Industry: {{vm.stock.Industry}}</li>
+    <li>MarketCap: {{vm.stock.MarketCap | currency:"USD$"}}</li>
+    <li>LastSale: {{vm.stock.LastSale | currency:"USD$"}}</li>
+</ul>

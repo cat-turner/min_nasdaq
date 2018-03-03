@@ -1,0 +1,4 @@
+<h1>{{ vm.title }}</h1>
+<ul>
+    <li ng-repeat="stock in vm.stocks"><a href="#!/stocks/{{stock._id}}">{{stock.Name}} ({{stock.Symbol}})</a></li>
+</ul>

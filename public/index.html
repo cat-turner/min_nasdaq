@@ -11,9 +11,11 @@
    <body>
       <!--create the ng view directive-->
       <div ng-view></div>
+
       <footer class="footer">
-         <div class="container">
-         </div>
+            <ul>
+               <li><strong>min nasdaq</strong></li>
+               <li></li>
       </footer>
 
       <script src="jquery/jquery-2.1.4.min.js"></script>
@@ -21,6 +23,8 @@
       <script src="node_modules/angular-route/angular-route.js"></script>
       <script src="angular-app/app.js"></script>
       <!-- include your controllers -->
-      <script type="text/javascript" src="angular-app/app.js"></script>
+      <script src="angular-app/data-factory/stock-data-factory.js"></script>
+      <script src="angular-app/stocks/stocks-controller.js"></script>
+      <script src="angular-app/stocks-info/stock-info-controller.js"></script>
    </body>
 </html>
