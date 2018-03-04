@@ -20,6 +20,7 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.1.1",
+    "mongo-sanitize": "^1.0.0",
     "mongodb": "^3.0.2",
     "mongoose": "^5.0.6",
     "querymen": "^2.1.3"

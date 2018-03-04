@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
 var Stocks = mongoose.model('Stock');
 var stockSearches = mongoose.model('StockSearch');
+var sanitize = require('mongo-sanitize');
 
-var handleError = function(res, err, code = 200) {
+var handleError = function(res, err, code = 400) {
     console.log("error finding stock");
     console.log(err);
     res
@@ -10,8 +11,26 @@ var handleError = function(res, err, code = 200) {
     .json(err);
 }
 
-var badValue = function(res, code = 400){
-    
+var jsonResponse = function(res, code = 200, message) {
+    res
+    .status(code)
+    .json({
+            'message': message
+        });
+
+}
+
+var saveStock = function(symbol) {
+
+    var search = new stockSearches({
+        Symbol: symbol
+    });
+
+    search.save(function(err, res) {
+        if (err) return handleError(res, err, 400);
+        console.log(res._id);
+    });
+
 }
 
 module.exports.getAllStocks = function(req, res) {
@@ -22,97 +41,86 @@ module.exports.getAllStocks = function(req, res) {
         MarketCap: 1,
         Industry: 1
     }
-    
+
     var offset = 0;
-    var count = 5;
+    var count = 100;
 
     var searchQuery = req.query;
-    
-    if (req.query){
-        
+
+    if (req.query) {
+
         var query = req.query;
-        
+
         // check for pagination
-        
-        if (query.offset){
-            
+
+        if (query.offset) {
+
             offset = parseInt(query.offset, 10);
         }
-        
-        if (query.count){
+
+        if (query.count) {
             count = parseInt(query.count, 10);
-            
+
         }
-        
-        if (isNaN(offset) || isNaN(count)){
-            res
-            .status(400)
-            .json({'error': 'bad value for query string'});
-            return;
+
+        if (isNaN(offset) || isNaN(count)) {
+
+            return jsonResponse(res, 400, 'bad value for query string');
+
         }
-        
-        // search for symbol
-        
-        if (query.Symbol){
-            
-            if (isNaN(query.Symbol)){
-                
-                
-            }
-            
-            
-            
-            
+
+        // stock symbol search
+
+        if (query.Symbol) {
+
+            var cleanSymbol = sanitize(query.Symbol).toUpperCase();
+
+            Stocks
+                .find({
+                    "Symbol": {
+                        '$regex': cleanSymbol
+                    }
+                })
+                .select(returnFields)
+                .exec(function(err, stocks) {
+                    if (err) return handleError(res, err, 500);
+
+                    console.log(stocks[0]);
+                    if (stocks) {
+
+                        saveStock(cleanSymbol)
+
+                        res
+                        .status(200)
+                        .json(stocks);
+
+
+
+                    } else {
+                        console.log('no stocks');
+                        jsonResponse(res, 404, 'stock not found');
+                    }
+
+                });
+
         }
-        
-        
+
     }
-    
-    
-    if (searchQuery.Symbol) {
-        Stocks.findOne({
-            'Symbol': searchQuery.Symbol
-        }, returnFields, function(err, stock) {
+
+    Stocks
+        .find()
+        .select(returnFields)
+        .skip(offset)
+        .limit(count)
+        .exec(function(err, stock) {
             if (err) return handleError(res, err, 500);
-
-            if (stock) {
-
-                var search = new stockSearches({
-                    Symbol: searchQuery.Symbol
-                });
-
-                search.save(function(err, res) {
-                    if (err) return handleError(res, err, 400);
-                    console.log(res._id);
-
-                });
-
-                res
-                .json(stock);
-
-            }else{
-                res
-                .status(404)
-                .json({'search': searchQuery.Symbol + ':stock not found'});
-            }
-
-
+            res
+            .json(stock);
 
         });
 
-    
-    }else {
-        Stocks
-            .find()
-            .select(returnFields)
-            .exec(function(err, stock) {
-                if (err) return handleError(res, err, 500);
-                res
-                .json(stock);
-
-            });
-    }
 };
+
 
 
 

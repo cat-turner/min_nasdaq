@@ -18,6 +18,8 @@ function config($routeProvider) {
 }
 
 // TODO - 
+// change code such that data service is used in onchange - query in
+// there do not use angular
 // Show history of queries in segment of page
 // non logged in feature - search by industry
 // non logged in feature - search by name
