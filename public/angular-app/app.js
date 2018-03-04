@@ -18,10 +18,9 @@ function config($routeProvider) {
 }
 
 // TODO - 
-// make a main page
-// change route to this be main page
-// add 'all' page to footer
-// User should be able to type in a stock signal
 // Show history of queries in segment of page
 // non logged in feature - search by industry
 // non logged in feature - search by name
+
+//clean up
+// refactor stock search + stock all

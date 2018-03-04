@@ -1,4 +1,18 @@
 <h1>{{ vm.title }}</h1>
-<ul>
-    <li ng-repeat="stock in vm.stocks"><a href="#!/stocks/{{stock._id}}">{{stock.Name}} ({{stock.Symbol}})</a></li>
-</ul>
+
+
+
+<div class='container'>
+    <div class='row'>
+        <div class='col-md-2'>
+            <label> Search: <input id="SearchBoxSym" ng-model="search.Symbol" ng-change="vm.inputChange()"></label>
+            <ul>
+                <li ng-repeat="stock in vm.stocks | filter: search | limitTo:vm.quantity"><a href="#!/stocks/{{stock._id}}">{{stock.Name}} ({{stock.Symbol}})</a></li>
+                <li>more...</li>
+            </ul>
+        </div>
+        <div class='col-md-2'>
+            <p>jaksdjhaksdjhaskjd</p>
+        </div>
+    </div>
+</div>
