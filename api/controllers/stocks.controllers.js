@@ -72,6 +72,7 @@ module.exports.getAllStocks = function(req, res) {
         if (query.Symbol) {
 
             var cleanSymbol = sanitize(query.Symbol).toUpperCase();
+            
 
             Stocks
                 .find({
@@ -83,8 +84,8 @@ module.exports.getAllStocks = function(req, res) {
                 .exec(function(err, stocks) {
                     if (err) return handleError(res, err, 500);
 
-                    console.log(stocks[0]);
                     if (stocks) {
+                        
 
                         saveStock(cleanSymbol)
 
@@ -96,7 +97,8 @@ module.exports.getAllStocks = function(req, res) {
 
                     } else {
                         console.log('no stocks');
-                        jsonResponse(res, 404, 'stock not found');
+                        return jsonResponse(res, 404, 'stock not found');
+
                     }
 
                 });
