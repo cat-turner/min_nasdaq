@@ -5,10 +5,11 @@ angular.module('min-nasdaq').factory('DataService', DataService);
 
 function DataService($http){
     
-    return {
+    return { 
         stockList: stockList,
         stockInfo: stockInfo,
-        stockSearchBySym: stockSearchBySym
+        stockSearchBySym: stockSearchBySym,
+        searchAnalytics: searchAnalytics
     };
     
     function stockList(){
@@ -19,11 +20,17 @@ function DataService($http){
         return $http.get('/api/stocks/'+ _id).then(complete).catch(failed);
     }
     
-    function stockSearchBySym(symbolStr){
+    function stockSearchBySym(symbolStr, count){
         return $http.get(
             '/api/stocks?Symbol=' + symbolStr.toUpperCase())
             .then(complete)
             .catch(failed);
+    }
+    
+    function searchAnalytics(){
+        return $http.get('api/analytics')
+        .then(complete)
+        .catch(failed);
     }
     
     function complete(response){
@@ -33,6 +40,7 @@ function DataService($http){
     function failed(error){
         console.log(error.statusText);
     }
+    
     
     
 }

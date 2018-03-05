@@ -43,9 +43,7 @@ module.exports.getAllStocks = function(req, res) {
     }
 
     var offset = 0;
-    var count = 100;
-
-    var searchQuery = req.query;
+    var count = 1000;
 
     if (req.query) {
 
