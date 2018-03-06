@@ -18,8 +18,8 @@ function config($routeProvider) {
 }
 
 // TODO - 
-// fix bug where unknown search result crashes server - need to catch error
-// non logged in feature - search by industry
+
+// non logged in feature - search by industry -> add to gui
 // non logged in feature - search by name
 
 //clean up

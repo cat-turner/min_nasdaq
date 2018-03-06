@@ -5,13 +5,16 @@ function StocksController($route, $routeParams, $timeout, DataService){
     vm.title = 'MEAN NASDAQ';
 
     vm.stocks = null
-    // DataService.stockList().then(function(response){
-    //     vm.stocks = response.data;
-    // });
+
+    // initial data
+    DataService.stockList().then(function(response){
+        vm.stocks = response.data;
+    });
     var inputPromise = null;
     
     vm.inputChange = function(){
         var searchStr = angular.element('#SearchBoxSym').val();
+        var searchResult = null;
 
         // kill the last promise that was made
         // this is to avoid making get 
@@ -26,16 +29,19 @@ function StocksController($route, $routeParams, $timeout, DataService){
             
             DataService.stockSearchBySym(searchStr).then(function(response){
                 vm.stocks = response.data;
+                searchResult = response.data;
+                
             }).catch(function(err){
                 console.log('stock not found');
             });
             
         }else{
-            vm.stocks = null;
-        }
-        
-        addSearchesToPage();
+            DataService.stockList().then(function(response){
+                vm.stocks = response.data;
+            });
             
+        }
+        addSearchesToPage();
         }, 300);
         
         

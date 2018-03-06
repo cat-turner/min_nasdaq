@@ -4,14 +4,14 @@
 
 <div class='container'>
     <div class='row'>
-        <div class='col-md-6'>
+        <div class='col-md-8'>
             <label> Search: <input id="SearchBoxSym" ng-model="search.Symbol" ng-change="vm.inputChange()"></label>
             <ul>
-                <li ng-repeat="stock in vm.stocks | filter: search"><a href="#!/stocks/{{stock._id}}">{{stock.Name}} ({{stock.Symbol}})</a></li>
+                <li ng-repeat="stock in vm.stocks | filter: search"><a href="#!/stocks/{{stock._id}}">{{stock.Name}} ({{stock.Symbol}}) - {{stock.IPOyear}} - {{stock.MarketCap}}</a></li>
                 <li>more...</li>
             </ul>
         </div>
-        <div class='col-md-6'>
+        <div class='col-md-4'>
             <ul>
                 Most recent searches
                 <li ng-repeat="search in vm.searchAnalytics">{{search.Symbol}}</li>
