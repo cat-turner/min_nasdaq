@@ -72,7 +72,7 @@ module.exports.getAllStocks = function(req, res) {
         if (query.Symbol) {
 
             var cleanSymbol = sanitize(query.Symbol).toUpperCase();
-            
+            console.log('middle part');
 
             Stocks
                 .find({
@@ -84,9 +84,9 @@ module.exports.getAllStocks = function(req, res) {
                 .exec(function(err, stocks) {
                     if (err) return handleError(res, err, 500);
 
-                    if (stocks) {
+                    if (stocks && stocks.length > 0) {
                         
-
+                        
                         saveStock(cleanSymbol)
 
                         res
@@ -97,15 +97,34 @@ module.exports.getAllStocks = function(req, res) {
 
                     } else {
                         console.log('no stocks');
-                        return jsonResponse(res, 404, 'stock not found');
+                        res
+                        .json({'message': 'stock not found'});
+                        return;
 
                     }
 
                 });
 
+        } else {
+
+            Stocks
+                .find()
+                .select(returnFields)
+                .skip(offset)
+                .limit(count)
+                .exec(function(err, stock) {
+                    if (err) return handleError(res, err, 500);
+                    res
+                    .json(stock);
+        
+                });
+                    
+            
+            
+            
         }
 
-    }
+    } else {
 
     Stocks
         .find()
@@ -118,6 +137,21 @@ module.exports.getAllStocks = function(req, res) {
             .json(stock);
 
         });
+        
+    }
+    // console.log('----');
+    // console.log('heyeye');
+    // Stocks
+    //     .find()
+    //     .select(returnFields)
+    //     .skip(offset)
+    //     .limit(count)
+    //     .exec(function(err, stock) {
+    //         if (err) return handleError(res, err, 500);
+    //         res
+    //         .json(stock);
+
+    //     });
 
 };
 
