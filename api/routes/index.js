@@ -20,7 +20,12 @@ router
     .route('/stocks')
 
 router
-    .route('/analytics')
-    .get(ctrlAnalytics.getSearchHistory);
+    .route('/siteanalytics')
+    .get(ctrlAnalytics.getSearchHistory)
+    .post(ctrlAnalytics.createSearch);
+    
+router
+    .route('/siteanalytics/calculate')
+    .get(ctrlAnalytics.getCalculatedValue)
 
 module.exports = router;

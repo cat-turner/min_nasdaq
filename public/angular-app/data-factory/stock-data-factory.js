@@ -28,7 +28,7 @@ function DataService($http){
     }
     
     function searchAnalytics(){
-        return $http.get('api/analytics')
+        return $http.get('api/siteanalytics')
         .then(complete)
         .catch(failed);
     }
