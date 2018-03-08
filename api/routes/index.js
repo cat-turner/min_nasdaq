@@ -21,7 +21,7 @@ router
 
 router
     .route('/siteanalytics')
-    .get(ctrlAnalytics.getSearchHistory)
+    .get(ctrlAnalytics.getSearch)
     .post(ctrlAnalytics.createSearch);
     
 router

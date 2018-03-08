@@ -18,7 +18,8 @@ function config($routeProvider) {
 }
 
 // TODO - 
-
+// check if post request is working when search by name
+// add validation method in API
 // non logged in feature - search by industry -> add to gui
 // non logged in feature - search by name
 

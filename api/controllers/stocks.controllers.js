@@ -20,18 +20,23 @@ var jsonResponse = function(res, code = 200, message) {
 
 }
 
-var saveStock = function(symbol) {
+var getclosestMatch = function(industries, userInput) {
 
-    var search = new stockSearches({
-        Symbol: symbol
-    });
+    var userInputUpper = userInput.toUpperCase();
+    var closeMatches = [];
+    for (var i = 0; i < industries.length; i++) {
+        var wordInText = industries[i];
+        var wordInTextUpper = wordInText.toUpperCase();
+        if (wordInTextUpper.includes(userInputUpper)) {
+            closeMatches.push(wordInText);
+        }
 
-    search.save(function(err, res) {
-        if (err) return handleError(res, err, 400);
-        console.log(res._id);
-    });
+    }
+
+    return closeMatches
 
 }
+
 
 module.exports.getAllStocks = function(req, res) {
 
@@ -87,21 +92,16 @@ module.exports.getAllStocks = function(req, res) {
 
                     if (stocks && stocks.length > 0) {
 
-                        if (stocks.length == 1 && stocks[0].Symbol == cleanSymbol){
-                           saveStock(cleanSymbol); 
-                        }
-                        
-
                         res
-                            .status(200)
-                            .json(stocks);
+                        .status(200)
+                        .json(stocks);
 
 
 
                     } else {
                         console.log('no stocks');
                         res
-                            .json({
+                        .json({
                                 'message': 'stock not found'
                             });
                         return;
@@ -120,6 +120,7 @@ module.exports.getAllStocks = function(req, res) {
             Stocks
                 .distinct("Industry")
                 .exec(function(err, industries) {
+                    
                     var closematches = getclosestMatch(industries, cleanIndustry);
 
                     if (closematches.length > 0) {
@@ -235,20 +236,3 @@ module.exports.getStockById = function(req, res) {
         });
 }
 
-var getclosestMatch = function(industries, userInput) {
-    var userInputUpper = userInput.toUpperCase();
-    var closeMatches = [];
-    for (var i = 0; i < industries.length; i++) {
-        var wordInText = industries[i];
-        var wordInTextUpper = wordInText.toUpperCase();
-        if (wordInTextUpper.includes(userInputUpper)) {
-            closeMatches.push(wordInText);
-        }
-
-    }
-
-    return closeMatches
-
-
-
-}

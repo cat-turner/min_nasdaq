@@ -9,7 +9,8 @@ function DataService($http){
         stockList: stockList,
         stockInfo: stockInfo,
         stockSearchBySym: stockSearchBySym,
-        searchAnalytics: searchAnalytics
+        createSearch: createSearch,
+        getSearch: getSearch
     };
     
     function stockList(){
@@ -27,10 +28,20 @@ function DataService($http){
             .catch(failed);
     }
     
-    function searchAnalytics(){
+    function getSearch(){
         return $http.get('api/siteanalytics')
         .then(complete)
         .catch(failed);
+    }
+    
+    function createSearch(searchString){
+        var data = JSON.stringify({
+            Symbol: searchString,
+        });
+
+        return $http.post('api/siteanalytics', data)
+        .then(complete, failed)
+        
     }
     
     function complete(response){

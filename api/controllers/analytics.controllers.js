@@ -12,7 +12,7 @@ var handleError = function(res, err, code = 400) {
     .json(err);
 }
 
-var jsonResponse = function(res, code = 200, message) {
+var jsonResponse = function(res, message, code = 200) {
     res
     .status(code)
     .json({
@@ -23,23 +23,36 @@ var jsonResponse = function(res, code = 200, message) {
 
 module.exports.createSearch = function(req, res){
     
-    console.log(req);
-    var symbol = "PPIH"; 
+    // data is sent via the body
+    console.log()
     
-    var search = new stockSearches({
-        Symbol: symbol
-    });
+    var symbol = req.body.Symbol
 
-    search.save(function(err, res) {
-        if (err) return handleError(res, err, 400);
-        console.log(res._id);
-    });
+    if (symbol){
+        
+        
+
+        var search = new stockSearches({
+            Symbol: symbol
+        });
+
+        search.save(function(err, doc) {
+            if (err) return handleError(doc, err, 400);
+            console.log('Saved '+ symbol + doc._id);
     
+        });
+
+        var message = 'added Symbol to db - ' + symbol
+        
+        return jsonResponse(res, message, 201);
+        
+    }
+
     
     
 }
 
-module.exports.getSearchHistory = function(req, res) {
+module.exports.getSearch = function(req, res) {
     var offset = 0;
     var count = 10;
 
@@ -63,7 +76,7 @@ module.exports.getSearchHistory = function(req, res) {
 
         if (isNaN(offset) || isNaN(count)) {
 
-            return jsonResponse(res, 400, 'bad value for query string');
+            return jsonResponse(res, 'bad value for query string', 400);
 
         }
         
@@ -114,24 +127,12 @@ module.exports.getCalculatedValue = function(req, res){
         stockSearches
         .aggregate([
             {
-                $match: {
-                    keywords: { $not: {$size: 0} }
-                }
-            },
-            { $unwind: "$keywords" },
-            {
                 $group: {
-                    _id: {$toLower: '$keywords'},
+                    symbol: {$toLower: 'Symbol'},
                     count: { $sum: 1 }
                 }
             },
-            {
-                $match: {
-                    count: { $gte: 2 }
-                }
-            },
-            { $sort : { count : -1} },
-            { $limit : 1000 }
+            { $sort : { count : -1} }
         ])
         .exec(function(err,keyCount){
             console.log(keyCount);

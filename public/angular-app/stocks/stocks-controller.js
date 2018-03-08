@@ -5,16 +5,32 @@ function StocksController($route, $routeParams, $timeout, DataService){
     vm.title = 'MEAN NASDAQ';
 
     vm.stocks = null
+    
+    var addSearchHistoryToPage = function(){
+        
+        DataService.getSearch().then(function(response){
+            vm.searchAnalytics = response.data;
+            console.log('search history');
+            console.log(response.data);
+        });
+    }
+    
+    var addStocksToPage = function(){
+    
+        DataService.stockList().then(function(response){
+            vm.stocks = response.data;
+        });
+        
+    }
 
-    // initial data
-    DataService.stockList().then(function(response){
-        vm.stocks = response.data;
-    });
+    
+
+
     var inputPromise = null;
     
     vm.inputChange = function(){
         var searchStr = angular.element('#SearchBoxSym').val();
-        var searchResult = null;
+
 
         // kill the last promise that was made
         // this is to avoid making get 
@@ -28,37 +44,38 @@ function StocksController($route, $routeParams, $timeout, DataService){
         if (searchStr.length > 1){
             
             DataService.stockSearchBySym(searchStr).then(function(response){
+                
                 vm.stocks = response.data;
-                searchResult = response.data;
+                DataService.createSearch(searchStr);
                 
             }).catch(function(err){
                 console.log('stock not found');
             });
             
+
+            
         }else{
-            DataService.stockList().then(function(response){
-                vm.stocks = response.data;
-            });
+            // when text is deleted, refill page
+            addStocksToPage();
+            addSearchHistoryToPage();
             
         }
-        addSearchesToPage();
+
+        // update the search history
+        
         }, 300);
         
-        
-        
+
 
     };
+
     $timeout.cancel(inputPromise);
     
-    var addSearchesToPage = function(){
-        
-        DataService.searchAnalytics().then(function(response){
-            vm.searchAnalytics = response.data;
-        });
-    }
+
     
     // on inital load, populate search history array
-    addSearchesToPage()
+    addStocksToPage();
+    addSearchHistoryToPage()
         
     
     
