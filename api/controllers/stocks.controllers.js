@@ -97,14 +97,8 @@ module.exports.getAllStocks = function(req, res) {
                         .json(stocks);
 
 
-
                     } else {
-                        console.log('no stocks');
-                        res
-                        .json({
-                                'message': 'stock not found'
-                            });
-                        return;
+                        jsonResponse(res, 404, 'Symbol - stock not found for search ' + cleanSymbol)
 
                     }
 
@@ -138,8 +132,8 @@ module.exports.getAllStocks = function(req, res) {
                                 if (err) return handleError(res, err, 500);
                                 if (stocks && stocks.length > 0) {
                                     res
-                                        .status(200)
-                                        .json(stocks);
+                                    .status(200)
+                                    .json(stocks);
                                     return;
 
                                 }
@@ -148,16 +142,40 @@ module.exports.getAllStocks = function(req, res) {
                             });
 
                     } else {
-                        console.log('no stocks under industry');
-                        res
-                            .json({
-                                'message': 'industry - stocks not found'
-                            });
+
+                        jsonResponse(res, 404, 'industry - stocks not found for search ' + query.Industry);
                         return;
                     }
 
                 });
 
+        } else if (query.Name){
+            
+            var cleanName = sanitize(query.Name);
+            Stocks
+            .find({
+                "Name": {
+                   '$regex': cleanName
+                }
+            })
+            .select(returnFields)
+            .exec(function(err, stocks){
+                if (err) return handleError(res, err, 500);
+                
+                if (stocks && stocks.length >= 1){
+        
+                res
+                .status(200)
+                .json(stocks);
+                return;
+                    
+                }else{
+                    jsonResponse(res, 404, 'Name not found for search ' + cleanName);
+                }
+    
+                
+            })
+        
         } else {
 
             Stocks
@@ -168,7 +186,8 @@ module.exports.getAllStocks = function(req, res) {
                 .exec(function(err, stock) {
                     if (err) return handleError(res, err, 500);
                     res
-                        .json(stock);
+                    .status(200)
+                    .json(stock);
 
                 });
 
@@ -187,7 +206,8 @@ module.exports.getAllStocks = function(req, res) {
             .exec(function(err, stock) {
                 if (err) return handleError(res, err, 500);
                 res
-                    .json(stock);
+                .status(200)
+                .json(stock);
 
             });
 
@@ -227,8 +247,8 @@ module.exports.getStockById = function(req, res) {
             } else {
 
                 res
-                    .status(200)
-                    .json(doc);
+                .status(200)
+                .json(doc);
 
             }
 

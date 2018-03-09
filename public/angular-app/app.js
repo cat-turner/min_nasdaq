@@ -18,10 +18,10 @@ function config($routeProvider) {
 }
 
 // TODO - 
-// check if post request is working when search by name
-// add validation method in API
-// non logged in feature - search by industry -> add to gui
-// non logged in feature - search by name
+// add authentication
 
-//clean up
+
+//clean up - at the end
 // refactor stock search + stock all
+// figure out why search by Name isn't as responsive. Is query taking
+//too long?

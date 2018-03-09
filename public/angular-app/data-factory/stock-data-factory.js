@@ -8,7 +8,7 @@ function DataService($http){
     return { 
         stockList: stockList,
         stockInfo: stockInfo,
-        stockSearchBySym: stockSearchBySym,
+        stockSearchByKey: stockSearchByKey,
         createSearch: createSearch,
         getSearch: getSearch
     };
@@ -21,9 +21,9 @@ function DataService($http){
         return $http.get('/api/stocks/'+ _id).then(complete).catch(failed);
     }
     
-    function stockSearchBySym(symbolStr, count){
+    function stockSearchByKey(key, symbolStr){
         return $http.get(
-            '/api/stocks?Symbol=' + symbolStr.toUpperCase())
+            '/api/stocks?' + key + '=' + symbolStr.toUpperCase())
             .then(complete)
             .catch(failed);
     }

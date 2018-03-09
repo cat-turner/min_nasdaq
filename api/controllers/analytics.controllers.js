@@ -24,27 +24,46 @@ var jsonResponse = function(res, message, code = 200) {
 module.exports.createSearch = function(req, res){
     
     // data is sent via the body
-    console.log()
     
-    var symbol = req.body.Symbol
+    var postReq = req.body;
 
-    if (symbol){
+    if (postReq.Symbol){
+        // seach by symbol
+        var symbol = sanitize(postReq.Symbol);
         
-        
+        stockSearches
+        .findOne({'Symbol': symbol}, function(err, item){
+            
+            if (err) return handleError(res, err, 404);
+            
+            if (item){
 
-        var search = new stockSearches({
-            Symbol: symbol
+                var search = new stockSearches({
+                    Symbol: symbol
+                });
+        
+                search.save(function(err, doc) {
+                    if (err) return handleError(doc, err, 400);
+                    console.log('Saved '+ symbol + doc._id);
+            
+                });
+        
+                var message = 'added Symbol to db - ' + symbol;
+                
+                return jsonResponse(res, message, 201);
+                
+            }else{
+                jsonResponse(res,
+                    'no match found; not added to db - ' + symbol,
+                    304);
+                return;
+            }
+            
         });
-
-        search.save(function(err, doc) {
-            if (err) return handleError(doc, err, 400);
-            console.log('Saved '+ symbol + doc._id);
-    
-        });
-
-        var message = 'added Symbol to db - ' + symbol
         
-        return jsonResponse(res, message, 201);
+        
+
+
         
     }
 

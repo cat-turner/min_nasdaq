@@ -23,13 +23,12 @@ function StocksController($route, $routeParams, $timeout, DataService){
         
     }
 
-    
-
 
     var inputPromise = null;
     
-    vm.inputChange = function(){
-        var searchStr = angular.element('#SearchBoxSym').val();
+    vm.inputChange = function(searchKey, id){
+
+        var searchStr = angular.element(id).val();
 
 
         // kill the last promise that was made
@@ -43,7 +42,7 @@ function StocksController($route, $routeParams, $timeout, DataService){
             
         if (searchStr.length > 1){
             
-            DataService.stockSearchBySym(searchStr).then(function(response){
+            DataService.stockSearchByKey(searchKey, searchStr).then(function(response){
                 
                 vm.stocks = response.data;
                 DataService.createSearch(searchStr);

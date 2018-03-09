@@ -5,17 +5,29 @@
 <div class='container'>
     <div class='row'>
         <div class='col-md-8'>
-            <label> Search: <input id="SearchBoxSym" ng-model="search.Symbol" ng-change="vm.inputChange()"></label>
+            <label> Search: <input id="search-box-sym" ng-model="search.Symbol" ng-change="vm.inputChange('Symbol', '#search-box-sym')"></label>
             <ul>
-                <li ng-repeat="stock in vm.stocks | filter: search"><a href="#!/stocks/{{stock._id}}">{{stock.Name}} ({{stock.Symbol}}) - {{stock.IPOyear}} - {{stock.MarketCap}}</a></li>
+                <li ng-repeat="stock in vm.stocks"><a href="#!/stocks/{{stock._id}}">{{stock.Name}} ({{stock.Symbol}}) - {{stock.IPOyear}} - {{stock.MarketCap}}</a></li>
                 <li>more...</li>
             </ul>
         </div>
         <div class='col-md-4'>
-            <ul>
-                Most recent searches
-                <li ng-repeat="search in vm.searchAnalytics"> {{search.Symbol}}</li>
-            </ul>
+            <div class='row'>
+                <ul>
+                    Most recent searches
+                    <li ng-repeat="search in vm.searchAnalytics"> {{search.Symbol}}</li>
+                </ul>
+            </div>
+            <div class='row'>
+                Search by Industry
+                <label><input id="search-box-industry" ng-model="search.Industry" ng-change="vm.inputChange('Industry','#search-box-industry')"></label>
+                
+            </div>
+            <div class='row'>
+                Search by Name
+                <label><input id="search-box-name" ng-model="search.Name" ng-change="vm.inputChange('Name', '#search-box-name')"></label>
+                
+            </div>
         </div>
     </div>
-</div>
+</div
