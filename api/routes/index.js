@@ -24,8 +24,8 @@ router
     .get(ctrlAnalytics.getSearch)
     .post(ctrlAnalytics.createSearch);
     
-router
-    .route('/siteanalytics/calculate')
-    .get(ctrlAnalytics.getCalculatedValue)
+//router
+    //.route('/siteanalytics/calculate')
+    //.get(ctrlAnalytics.getCalculatedValue)
 
 module.exports = router;

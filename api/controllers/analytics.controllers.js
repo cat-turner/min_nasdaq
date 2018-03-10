@@ -31,12 +31,16 @@ module.exports.createSearch = function(req, res){
         // seach by symbol
         var symbol = sanitize(postReq.Symbol);
         
-        stockSearches
+        Stocks
         .findOne({'Symbol': symbol}, function(err, item){
             
             if (err) return handleError(res, err, 404);
             
+            
             if (item){
+                console.log('---');
+                console.log(item);
+                symbol = item.Symbol;
 
                 var search = new stockSearches({
                     Symbol: symbol

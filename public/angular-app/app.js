@@ -20,8 +20,9 @@ function config($routeProvider) {
 // TODO - 
 // add authentication
 
-
+//WANTS
 //clean up - at the end
+// determine if items are being posted multiple times
 // refactor stock search + stock all
 // figure out why search by Name isn't as responsive. Is query taking
 //too long?
