@@ -5,6 +5,7 @@ var router = express.Router();
 
 var ctrlStocks = require('../controllers/stocks.controllers.js');
 var ctrlAnalytics = require('../controllers/analytics.controllers.js');
+var ctrlUsers = require('../controllers/users.controllers.js');
 
 // routes
 
@@ -23,6 +24,11 @@ router
     .route('/siteanalytics')
     .get(ctrlAnalytics.getSearch)
     .post(ctrlAnalytics.createSearch);
+    
+router
+    .route('/Users')
+    .get(ctrlUsers.userLogin)
+    .post(ctrlUsers.userRegister);
     
 //router
     //.route('/siteanalytics/calculate')

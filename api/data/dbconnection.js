@@ -53,3 +53,4 @@ process.once('SIGUSR2', function(){
 
 // bring in the schemas and models
 require('./stocks.model');
+require('./users.model');

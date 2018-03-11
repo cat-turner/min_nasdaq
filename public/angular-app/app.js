@@ -26,3 +26,4 @@ function config($routeProvider) {
 // refactor stock search + stock all
 // figure out why search by Name isn't as responsive. Is query taking
 //too long?
+// refactor - put repeat methods like jsonResponse somehwere. Maybe a lib
