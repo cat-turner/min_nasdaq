@@ -43,11 +43,11 @@ module.exports.userLogin = function(req, res){
             if (user && user.username && user.password){
                 // find password after decryption
                 
-                bcrypt.compare(userPassword, user.password, function(err, res){
+                bcrypt.compare(userPassword, user.password, function(err, isValid){
                     
-                    if (err) return handleError()
+                    if (err) return handleError(res, err);
                     
-                    if (res){
+                    if (isValid){
                         jsonResponse(res, 'valid login', 200);
                     }else{
                         jsonResponse(res, 'invalid login', 401);
