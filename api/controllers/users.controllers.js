@@ -2,10 +2,17 @@ var mongoose = require('mongoose');
 var Users = mongoose.model('Users');
 var sanitize = require('mongo-sanitize');
 
+// async encryption
+var bcrypt = require('bcrypt');
+const saltRounds = 1;
+
+
+
 var handleError = function(res, err, code = 400){
+    console.log(JSON.stringify(err));
     res
     .status(code)
-    .json(err);
+    .json({'error' : JSON.stringify(err)});
 }
 
 var jsonResponse = function(res, message, code = 200) {
@@ -29,13 +36,27 @@ module.exports.userLogin = function(req, res){
         Users
         .findOne({
             'username': userName,
-            'password': userPassword
         })
         .exec(function(err, user){
             if (err) return handleError(res, err, 500);
+            
             if (user && user.username && user.password){
+                // find password after decryption
                 
-                jsonResponse(res, 'valid login', 200);
+                bcrypt.compare(userPassword, user.password, function(err, res){
+                    
+                    if (err) return handleError()
+                    
+                    if (res){
+                        jsonResponse(res, 'valid login', 200);
+                    }else{
+                        jsonResponse(res, 'invalid login', 401);
+                        
+                    }
+                    
+                })
+                
+                
                 
                 
             }else{
@@ -56,11 +77,6 @@ module.exports.userRegister = function(req, res){
     var userName = sanitize(req.body.username);
     var password = sanitize(req.body.password);
     var name = sanitize(req.body.name);
-    console.log('----');
-    console.log(userName);
-    console.log(password);
-    console.log(!userName);
-    console.log(isNaN(userName));
     
     // check if values empty
 
@@ -74,24 +90,36 @@ module.exports.userRegister = function(req, res){
         .exec(function(err, user){
             
             if (err) return handleError(res, err);
+            console.log('----in findone---');
             
             if (!user){
+                console.log('in user');
                 
-                var UserData = new Users({
-                    username: userName,
-                    name: name,
-                    password: password
+                // encrypt user password
+                bcrypt.hash(password, saltRounds, function(err, hash) {
+                  // Store hash in your password DB.
+                  
+                    var UserData = new Users({
+                        username: userName,
+                        name: name,
+                        password: hash
+                        
+                    });
                     
+                    UserData.save(function(err,result){
+                        
+                        if (err) return handleError(res, err, 304);
+                        
+                        jsonResponse(res, 'user added to db', 200);
+                        
+                        
+                    });
+                    
+                  
+                  
                 });
                 
-                UserData.save(function(err,result){
-                    
-                    if (err) return handleError(res, err, 304);
-                    
-                    jsonResponse(res, 'user added to db', 200);
-                    
-                    
-                });
+
                 
             }else{
                 console.log('Username already exists');
