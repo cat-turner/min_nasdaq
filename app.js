@@ -17,6 +17,14 @@ app.use(function(req, res, next) {
   next(); 
 });
 
+
+// jwt
+
+const jwt = require('express-jwt')({ secret: 'super secret' });
+// pass jwt to end points that require auth
+// require JWT authentication
+//app.use('/users', jwt);
+
 // Set static directory before defining routes
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));

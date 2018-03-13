@@ -13,12 +13,20 @@ function config($routeProvider) {
       templateUrl: 'angular-app/stocks-info/info.html',
       controller: StockInfoController,
       controllerAs: 'vm'
-    });
+    })
+    .when('/login', {
+      templateUrl:'/angular-app/login/login.html',
+      controller:LoginController,
+      controllerAs:'vm'
+    })
   
 }
 
 // TODO - 
 // add authentication
+// i. add html code to form
+// ii.try out form. Should be able to submit data
+// iii. change user login to post method, and test route
 
 //WANTS
 //clean up - at the end

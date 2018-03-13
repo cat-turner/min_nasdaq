@@ -26,7 +26,7 @@ router
     .post(ctrlAnalytics.createSearch);
     
 router
-    .route('/Users')
+    .route('/users')
     .get(ctrlUsers.userLogin)
     .post(ctrlUsers.userRegister);
     
