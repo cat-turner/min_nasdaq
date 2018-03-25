@@ -1,10 +1,13 @@
 var mongoose = require('mongoose');
 var Users = mongoose.model('Users');
 var sanitize = require('mongo-sanitize');
+var jwt = require('jsonwebtoken');
 
 // async encryption
 var bcrypt = require('bcrypt');
 const saltRounds = 1;
+// this should be stored in an environmental variable
+var secretToken = 's3cr3t';
 
 
 
@@ -27,9 +30,9 @@ var jsonResponse = function(res, message, code = 200) {
 
 module.exports.userLogin = function(req, res){
     
-    console.log(req.query);
-    var userName = sanitize(req.query.username);
-    var userPassword = sanitize(req.query.password);
+    console.log(req.body);
+    var userName = sanitize(req.body.username);
+    var userPassword = sanitize(req.body.password);
 
     if (userName && userPassword){
         
@@ -48,9 +51,15 @@ module.exports.userLogin = function(req, res){
                     if (err) return handleError(res, err);
                     
                     if (isValid){
-                        jsonResponse(res, 'valid login', 200);
+                        
+                        // return token if user has successfully signed in
+                        var token = jwt.sign({ username: user.username }, secretToken, { expiresIn: 86400 }); //expirse in 24 hours
+                        res
+                        .status(200)
+                        .json({success: true, token: token});
+                        
                     }else{
-                        jsonResponse(res, 'invalid login', 401);
+                        jsonResponse(res, 'Unauthorized', 401);
                         
                     }
                     
@@ -110,7 +119,7 @@ module.exports.userRegister = function(req, res){
                         
                         if (err) return handleError(res, err, 304);
                         
-                        jsonResponse(res, 'user added to db', 200);
+                        jsonResponse(res, 'user added to db', 201);
                         
                         
                     });
@@ -140,3 +149,24 @@ module.exports.userRegister = function(req, res){
     
     }
 }
+
+module.exports.authenticate = function(req, res, next) {
+    // autherization header
+  var headerExists = req.headers.authorization;
+  if (headerExists) {
+    var token = req.headers.authorization.split(' ')[1]; 
+    jwt.verify(token, secretToken, function(error, decoded) {
+      if (error) {
+        console.log(error);
+        res.status(401).json('Unauthorized');
+      } else {
+          // decoded = decoded token
+        req.user = decoded.username;
+        next();
+      }
+    });
+  } else {
+    console.log('no header!!!');
+    res.status(403).json('No token provided');
+  }
+};

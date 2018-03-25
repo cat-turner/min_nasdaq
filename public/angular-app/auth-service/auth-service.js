@@ -14,7 +14,7 @@ function AuthServices($http){
             password: password
         });
         // TODO - need to change to post
-        return $http.get('api/users', data)
+        return $http.post('api/users', data)
         .then(complete, failed);
     }
     

@@ -20,7 +20,7 @@ app.use(function(req, res, next) {
 
 // jwt
 
-const jwt = require('express-jwt')({ secret: 'super secret' });
+//const jwt = require('express-jwt')({ secret: 'super secret' });
 // pass jwt to end points that require auth
 // require JWT authentication
 //app.use('/users', jwt);

@@ -25,13 +25,19 @@ router
     .get(ctrlAnalytics.getSearch)
     .post(ctrlAnalytics.createSearch);
     
-router
-    .route('/users')
-    .get(ctrlUsers.userLogin)
-    .post(ctrlUsers.userRegister);
-    
+
 //router
     //.route('/siteanalytics/calculate')
     //.get(ctrlAnalytics.getCalculatedValue)
+
+// Authentication
+router
+  .route('/users/register')
+  .post(ctrlUsers.userRegister);
+
+router
+  .route('/users/login')
+  .post(ctrlUsers.userLogin);
+
 
 module.exports = router;
