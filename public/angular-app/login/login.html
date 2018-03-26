@@ -10,7 +10,7 @@
       {{ vm.error }}
     </div>
     <div class='col-4'>
-    <form ng-if="!vm.isLoggedIn()" name="login" ng-submit="vm.login()" ng-hide="hideform">
+    <form ng-if="!vm.isLoggedIn" name="login" ng-submit="vm.login()" ng-hide="hideform">
       <p>New here? <a href="#!/register">Register</a>.</p>
       <div class="form-group">
         <label for="username">Username</label>
@@ -22,7 +22,7 @@
       </div>
       <button type="submit" class="btn btn-success">Login</button>
     </form>
-    <form ng-if="vm.isLoggedIn()" name="logout" ng-submit="vm.logout()">
+    <form ng-if="vm.isLoggedIn" name="logout" ng-submit="vm.logout()">
       <button type="submit" class="btn btn-success">Logout</button>
     </form>
     </div>

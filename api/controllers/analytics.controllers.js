@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Stocks = mongoose.model('Stock');
 var stockSearches = mongoose.model('StockSearch');
+var Users = mongoose.model('Users');
 var sanitize = require('mongo-sanitize');
 
 
@@ -38,8 +39,7 @@ module.exports.createSearch = function(req, res){
             
             
             if (item){
-                console.log('---');
-                console.log(item);
+
                 symbol = item.Symbol;
 
                 var search = new stockSearches({
@@ -52,7 +52,7 @@ module.exports.createSearch = function(req, res){
             
                 });
         
-                var message = 'added Symbol to db - ' + symbol;
+                var message = 'success';
                 
                 return jsonResponse(res, message, 201);
                 
@@ -65,13 +65,7 @@ module.exports.createSearch = function(req, res){
             
         });
         
-        
-
-
-        
     }
-
-    
     
 }
 
@@ -134,45 +128,43 @@ module.exports.getSearch = function(req, res) {
 }
 
 
-module.exports.getCalculatedValue = function(req, res){
+module.exports.saveSearchUser = function(req, res){
+    // check if auth info in body
+    var userName = req.user;
+    var stockName = sanitize(req.body.name);
+    if (stockName){
+        Users
+        .findOne({
+            username:userName
+        })
+        .select('searchHistory')
+        .exec(function(err,user){
+            if (err) return handleError(res, err, 404);
     
-    if (req.query){
-        var query = req.query;
-        
-        
-        if (query.TopTen){
+            if (!user){
+    
+                return jsonResponse(res, 'user not found', 404);
+                
+            } else{
+                
+                user.searchHistory.push({
+                    name: stockName
+                });
+                user.save(function(err,userUpdated){
+                    if (err) return handleError(res, err, 500);
+                    
+                    res
+                    .status(201)
+                    .json({'message': 'search saved'});
+                });
+                
+            }
             
-            var param = sanitize(query.TopTen);
-            
-            
-        // find unique items, count, and do this for top N
-        //https://stackoverflow.com/questions/14924495/mongodb-count-num-of-distinct-values-per-field-key
-        stockSearches
-        .aggregate([
-            {
-                $group: {
-                    symbol: {$toLower: 'Symbol'},
-                    count: { $sum: 1 }
-                }
-            },
-            { $sort : { count : -1} }
-        ])
-        .exec(function(err,keyCount){
-            console.log(keyCount);
-            res
-            .response(200)
-            .json(keyCount);
-            
-        });
-            
-            
-            
-        }
-        
-        
+        })
+
     }else{
-        res
-        .status(200)
-        .json({"message" : "nothing to calculate"});
+        return jsonResponse(res, 'no stock provided', 500);
     }
+    
+    
 }

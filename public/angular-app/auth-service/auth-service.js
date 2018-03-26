@@ -18,7 +18,6 @@ function AuthServices($http, $window, AuthFactory,jwtHelper){
         .then(function(response){
             
             if (response.data.success){
-                console.log('token obtained');
                 var token = response.data.token;
                 $window.sessionStorage.token = token;
                 var decodedToken = jwtHelper.decodeToken(token);

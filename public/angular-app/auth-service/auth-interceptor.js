@@ -30,6 +30,7 @@ function AuthInterceptor($location, $q, $window, AuthFactory) {
       delete $window.sessionStorage.token;
       AuthFactory.isLoggedIn = false;
       $location.path('/');
+
     }
     return $q.reject(rejection);
   }

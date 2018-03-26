@@ -1,0 +1,23 @@
+<div class='container'>
+  <div class='row'>
+      <h1>Howdy {{vm.name}}</h1>
+      <div ng-if="vm.searchHistory">
+        <p>Here's your search history</p>
+        <ul>
+          <li ng-repeat="search in vm.searchHistory">{{search.name}}</li>
+        </ul>
+        
+      </div>
+      <div ng-if="!vm.searchHistory">
+        <p>Not much going on here.</p>
+      </div>
+      
+      <div ng-if="!vm.isLoggedIn">
+          <p>{{vm.message}}</p>
+          <ul>
+              <li><a href="#!/login">Login</a></li>
+              <li><a href="#!/register">Register</a></li>
+          </ul>
+      </div>
+  </div>
+</div>

@@ -9,20 +9,13 @@ function LoginController($window,$scope, $location, AuthServices, AuthFactory){
       $scope.hideform = true;
     }
 
-    vm.isLoggedIn = function() {
-      if (AuthFactory.isLoggedIn) {
-        return true;
-      } else {
-        return false;
-      }
-    };
+    vm.isLoggedIn = AuthFactory.isLoggedIn;
 
     vm.login = function() {
     if (!vm.username || !vm.password) {
       vm.error = 'Please add a username and a password.';
     } else {
         AuthServices.verifyUser(vm.username, vm.password).then(function(result) {
-          console.log(result);
           vm.message = 'You are logged in!';
           vm.error = '';
           $scope.hideform = true;

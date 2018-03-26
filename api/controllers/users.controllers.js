@@ -54,6 +54,8 @@ module.exports.userLogin = function(req, res){
                         
                         // return token if user has successfully signed in
                         var token = jwt.sign({ username: user.username }, secretToken, { expiresIn: 86400 }); //expirse in 24 hours
+                        
+                        
                         res
                         .status(200)
                         .json({success: true, token: token});
@@ -64,9 +66,6 @@ module.exports.userLogin = function(req, res){
                     }
                     
                 })
-                
-                
-                
                 
             }else{
                 jsonResponse(res, 'invalid login', 401);
@@ -93,13 +92,11 @@ module.exports.userRegister = function(req, res){
         
         Users
         .findOne({
-            username: userName,
-            password: password
+            username: userName
         })
         .exec(function(err, user){
             
             if (err) return handleError(res, err);
-            console.log('----in findone---');
             
             if (!user){
                 console.log('in user');
@@ -162,11 +159,37 @@ module.exports.authenticate = function(req, res, next) {
       } else {
           // decoded = decoded token
         req.user = decoded.username;
+        console.log(req);
         next();
       }
     });
   } else {
-    console.log('no header!!!');
     res.status(403).json('No token provided');
   }
 };
+
+module.exports.profileInfo = function(req, res){
+    var returnFields = {
+        name: 1,
+        username:1,
+        searchHistory:1
+    }
+
+    var userName = req.user;
+    
+
+    Users
+    .findOne({
+        username: userName
+    })
+    .select(returnFields)
+    .exec(function(err, user){
+            
+        if (err) return handleError(res, err);
+        res
+        .status(200)
+        .json(user);
+    
+    });
+    
+}

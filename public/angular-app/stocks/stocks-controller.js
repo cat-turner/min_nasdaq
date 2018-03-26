@@ -10,8 +10,6 @@ function StocksController($route, $routeParams, $timeout, DataService){
         
         DataService.getSearch().then(function(response){
             vm.searchAnalytics = response.data;
-            console.log('search history');
-            console.log(response.data);
         });
     }
     
@@ -63,19 +61,11 @@ function StocksController($route, $routeParams, $timeout, DataService){
         // update the search history
         
         }, 300);
-        
-
-
     };
 
     $timeout.cancel(inputPromise);
-    
-
-    
     // on inital load, populate search history array
     addStocksToPage();
     addSearchHistoryToPage()
-        
-    
     
 }

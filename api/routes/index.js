@@ -24,20 +24,24 @@ router
     .route('/siteanalytics')
     .get(ctrlAnalytics.getSearch)
     .post(ctrlAnalytics.createSearch);
-    
 
-//router
-    //.route('/siteanalytics/calculate')
-    //.get(ctrlAnalytics.getCalculatedValue)
+router
+    .route('/siteanalytics/user')
+    .post(ctrlUsers.authenticate, ctrlAnalytics.saveSearchUser)
+
 
 // Authentication
 router
-  .route('/users/register')
-  .post(ctrlUsers.userRegister);
+    .route('/users/register')
+    .post(ctrlUsers.userRegister);
 
 router
-  .route('/users/login')
-  .post(ctrlUsers.userLogin);
+    .route('/users/login')
+    .post(ctrlUsers.userLogin);
+ 
+router
+    .route('/profile')
+    .get(ctrlUsers.authenticate, ctrlUsers.profileInfo);
 
 
 module.exports = router;

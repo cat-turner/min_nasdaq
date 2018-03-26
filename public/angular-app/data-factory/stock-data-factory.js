@@ -3,7 +3,7 @@
 angular.module('min-nasdaq').factory('DataService', DataService);
 
 
-function DataService($http){
+function DataService($http, AuthFactory, UserDataService){
     
     return { 
         stockList: stockList,
@@ -38,9 +38,14 @@ function DataService($http){
         var data = JSON.stringify({
             Symbol: searchString,
         });
-
         return $http.post('api/siteanalytics', data)
-        .then(complete, failed)
+        .then(function(response){
+            if (response.data.message == 'success' && AuthFactory.isLoggedIn){
+
+                UserDataService.saveUserSearch(searchString)
+                .then(complete).catch(failed);
+            }
+        }).catch(failed)
         
     }
     
