@@ -14,16 +14,23 @@
 
       <footer class="footer">
             <ul>
-               <li><strong>min nasdaq</strong></li>
-               <li></li>
+               <li><a href='#!/'><strong>min nasdaq</strong></a></li>
+               <li><a href="#!/login">Login</a></li>
+            </ul>
       </footer>
 
       <script src="jquery/jquery-2.1.4.min.js"></script>
       <script src="node_modules/angular/angular.js"></script>
       <script src="node_modules/angular-route/angular-route.js"></script>
+     <script src="node_modules/angular-jwt/dist/angular-jwt.js"></script>
       <script src="angular-app/app.js"></script>
       <!-- include your controllers -->
+      <script src="angular-app/auth-service/auth-factory.js"></script>
+      <script src="angular-app/auth-service/auth-interceptor.js"></script>
+      <script src="angular-app/auth-service/auth-service.js"></script>
       <script src="angular-app/data-factory/stock-data-factory.js"></script>
+      <script src="angular-app/login/login-controller.js"></script>
+      <script src="angular-app/register/register-controller.js"></script>
       <script src="angular-app/stocks/stocks-controller.js"></script>
       <script src="angular-app/stocks-info/stock-info-controller.js"></script>
    </body>

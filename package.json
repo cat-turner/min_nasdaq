@@ -1,7 +1,7 @@
 {
-  "name": "meaniehotel",
+  "name": "min-nasdaq-app",
   "version": "1.0.0",
-  "description": "mean hotel api from mean stack 0 to hero",
+  "description": "minimalist app to view stocks",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "angular": "^1.6.9",
+    "angular-jwt": "^0.1.9",
     "angular-route": "^1.6.9",
     "bcrypt": "^1.0.3",
     "bcrypt-nodejs": "0.0.3",
